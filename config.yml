@@ -1,0 +1,15 @@
+training_length: 10
+
+
+filters:
+  butterworth:
+    order: 50
+  bessel:
+    order: 10
+  chebyshev:
+    order: 12
+    rp: 0.1
+  elliptic:
+    order: 12
+    rp: 0.01
+    rs: 100

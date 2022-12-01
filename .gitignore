@@ -1,0 +1,6 @@
+# Python-related
+**/__pycache__
+venv/
+
+# Datasets
+DSD100/
