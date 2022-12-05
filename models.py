@@ -5,6 +5,11 @@ import typing as T
 from config import CONFIG
 
 
+
+#class Discriminator(nn.Module):
+
+
+
 class DilationGenerator(nn.Module):
     def __init__(self, fs):
         super().__init__()
@@ -51,8 +56,6 @@ class DilationGenerator(nn.Module):
         for conv in self.output_conv:
             x = torch.relu(x)
             x = conv(x)
-
-        x = torch.tanh(x)
 
         x = x[:, 0, :]
 
