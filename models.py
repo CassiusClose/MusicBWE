@@ -17,8 +17,6 @@ class DilationGenerator(nn.Module):
         for i in range(4):
             layer = nn.ModuleList()
             layer.append(nn.Conv1d(channels, channels, 3, dilation=3**i, padding="same"))
-            layer.append(nn.Conv1d(channels//2, channels, 1))
-            layer.append(nn.Conv1d(channels//2, channels, 1))
 
             self.layers.append(layer)
 
@@ -42,14 +40,9 @@ class DilationGenerator(nn.Module):
 
             x = layer[0](x)
 
-            s1, s2 = x.split(x.shape[1]//2, 1)
-            s1 = torch.tanh(s1)
-            s2 = torch.sigmoid(s2)
-            cat = s1 * s2
+            x = torch.relu(x)
 
-            x = layer[1](cat)
-            skip = layer[2](cat)
-            skips += skip
+            skips += x
 
             x = inp + x
             
