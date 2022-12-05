@@ -1,17 +1,9 @@
 import torch
 import matplotlib.pyplot as plt
+import scipy.signal as signal
+import numpy as np
 
-def plot_spect(sig, fs, title=None, show=True, fig_ind=0):
-    if len(sig.shape) > 1:
-        sig = sig[0]
-
-    n_win = 256
-    n_hop = 128
-    pad = 1
-    win = torch.hann_window(n_win)
-    stft = torch.stft(sig, n_fft=n_win*pad, hop_length=n_hop, win_length=n_win, window=win,
-            center=False, return_complex=True).abs().clamp(1e-8).log10()
-
+def plot_spect(stft, fs, n_win, n_hop, title=None, show=True, fig_ind=0):
 
     # The max values of the x & y axes.
     # FFT measures frequency from 0 to fs/2
@@ -28,6 +20,8 @@ def plot_spect(sig, fs, title=None, show=True, fig_ind=0):
     # Axis arrays
     freqs = torch.arange(0, max_freq, freq_step)
     times = torch.arange(0, max_time, time_step)
+    if(times.shape[0] > stft.shape[-1]):
+        times = times[:-1]
 
     plt.figure(fig_ind)
     plt.pcolormesh(times, freqs, stft)
@@ -42,7 +36,20 @@ def plot_spect(sig, fs, title=None, show=True, fig_ind=0):
         plt.show()
 
     return (freqs, times)
-    
+
+
+def plot_calc_spect(sig, fs, title=None, show=True, fig_ind=0):
+    if len(sig.shape) > 1:
+        sig = sig[0]
+
+    n_win = 256
+    n_hop = 128
+    pad = 1
+    win = torch.hann_window(n_win)
+    stft = torch.stft(sig, n_fft=n_win*pad, hop_length=n_hop, win_length=n_win, window=win,
+            center=False, return_complex=True).abs().clamp(1e-8).log10()
+
+    return plot_spect(stft, fs, n_win, n_hop, title, show, fig_ind)
 
 
 def plot_freqz(sos, fs, cutoff_freq, fig_ind=0):

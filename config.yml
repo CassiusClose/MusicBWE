@@ -1,15 +1,47 @@
-training_length: 10
+data_fs: 44100
+lp_fs: 8000
+
+training_length: 2
+
+# When processing a whole audio file, split it into segments to process one at
+# a time, for memory reasons. This is the length in seconds of each segment.
+# This number will change depending on the system.
+eval_segment_seconds: 35
+
+saved_model_folder: 'models/'
 
 
+# Inclusive ranges for parameters
 filters:
+  cutoff_low: 3000
+  cutoff_high: 6000
   butterworth:
-    order: 50
+    order_low: 40
+    order_high: 60
   bessel:
-    order: 10
+    order_low: 5
+    order_high: 15
   chebyshev:
-    order: 12
+    order_low: 10
+    order_high: 20
     rp: 0.1
   elliptic:
-    order: 12
+    order_low: 8
+    order_high: 15
     rp: 0.01
-    rs: 100
+    rs_low: 80
+    rs_high: 120
+
+#filters:
+#  cutoff: 5000
+#  butterworth:
+#    order: 50
+#  bessel:
+#    order: 10
+#  chebyshev:
+#    order: 12
+#    rp: 0.1
+#  elliptic:
+#    order: 12
+#    rp: 0.01
+#    rs: 100
