@@ -6,6 +6,10 @@ from config import CONFIG
 
 
 def filter_train_rand(waveform, fs):
+    """
+    Pick a random training filter with random parameters, apply it
+    """
+    
     filt = torch.randint(0, 3, (1,)).item()
     match filt:
         case 0:
@@ -18,6 +22,12 @@ def filter_train_rand(waveform, fs):
     return None
 
 
+
+
+
+"""
+Apply the specified filter with random parameters
+"""
 
 def filter_butter_rand(waveform, fs):
     (order, cutoff, rp, rs) = choose_rand_gen_filt_params('butterworth')
@@ -38,6 +48,9 @@ def filter_ellip_rand(waveform, fs):
     
 
 
+"""
+Apply the specified filter with the given parameters
+"""
 def filter_butter(waveform, fs, cutoff, order):
     sos = signal.butter(order, cutoff, output='sos', fs=fs)
     return torch.Tensor(signal.sosfilt(sos, waveform))
@@ -61,6 +74,10 @@ def filter_ellip(waveform, fs, cutoff, order, rp, rs):
 
 
 def choose_rand_gen_filt_params(filter_name):
+    """
+    Choose random filter parameters based on ranges in config
+    """
+
     order_low = CONFIG['filters'][filter_name]['order_low']
     order_high = CONFIG['filters'][filter_name]['order_high'] + 1
     order = torch.randint(order_low, order_high, (1,)).item()

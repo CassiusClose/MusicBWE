@@ -8,14 +8,25 @@ from filters import *
 from transforms import Transforms
 
 
-
 class DSD100Dataset(Dataset):
-    def __init__(self, path, return_audio_segment=True):
+    def __init__(self, path, return_audio_segment=True, test_filter=False):
+        """
+        return_audio_segment:   Whether to return a short segment of audio (for
+                                training) or the entire recording (for
+                                inference). If true, will return a segment of
+                                the audio file according to the config
+                                variable training_length.
+
+        test_filter:            Whether to filter the audio with the test filter
+                                or a randomly selected training filter.
+        """
+
         path = pathlib.Path(path)   
         files = path.rglob("*.wav")
         self.filepaths = [s.as_posix() for s in files]
 
         self.return_audio_segment = return_audio_segment
+        self.test_filter = test_filter
 
 
     def __getitem__(self, index):
@@ -34,15 +45,18 @@ class DSD100Dataset(Dataset):
 
         # Calculate the spectrogram for accuracy/losses
         # Could save these to the disk for quicker training.
-        spect2048 = Transforms.Spectrogram2048(audio)
+        spects = Transforms.Spectrograms(audio)
 
 
-        # Perform random filtering, then downsample
-        lp_audio = filter_train_rand(audio, fs)
-        resamp_audio = Transforms.Downsample(lp_audio)
+        # Perform random filtering (or use the test filter), then downsample
+        if self.test_filter:
+            resamp_audio = Transforms.TestDownsample(audio)
+        else:
+            lp_audio = filter_train_rand(audio, fs)
+            resamp_audio = Transforms.Downsample(lp_audio)
 
 
-        return (self.filepaths[index], audio, resamp_audio, spect2048)
+        return (self.filepaths[index], audio, resamp_audio, spects)
 
 
 

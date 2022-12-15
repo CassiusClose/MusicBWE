@@ -1,0 +1,14 @@
+Full Model:
+    SDR: 14.87 dB
+    SNR: 8.45 dB
+    LSD: 2.59 dB
+
+No Spectral Discriminator:
+    SDR: 15.35 dB
+    SNR: 7.45 dB
+    LSD: 2.64 dB
+
+No Discriminators:
+    SDR: 13.91 dB 
+    SNR: 8.44 dB 
+    LSD: 3.65 dB

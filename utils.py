@@ -3,7 +3,15 @@ import matplotlib.pyplot as plt
 import scipy.signal as signal
 import numpy as np
 
+"""
+Misc plotting functions
+"""
+
+
 def plot_spect(stft, fs, n_win, n_hop, title=None, show=True, fig_ind=0):
+    """
+    Plots the given spectrogram as a power spectrogram.
+    """
 
     # The max values of the x & y axes.
     # FFT measures frequency from 0 to fs/2
@@ -24,7 +32,7 @@ def plot_spect(stft, fs, n_win, n_hop, title=None, show=True, fig_ind=0):
         times = times[:-1]
 
     plt.figure(fig_ind)
-    plt.pcolormesh(times, freqs, stft)
+    plt.pcolormesh(times, freqs, stft.pow(2).clamp(1e-8).log10())
     plt.xlabel("Time (s)")
     plt.ylabel("Frequency (Hz)")
     if title:
@@ -38,21 +46,31 @@ def plot_spect(stft, fs, n_win, n_hop, title=None, show=True, fig_ind=0):
     return (freqs, times)
 
 
+
 def plot_calc_spect(sig, fs, title=None, show=True, fig_ind=0):
+    """
+    Calculate and plot the spectrogram of an audio signal
+    """
+
     if len(sig.shape) > 1:
         sig = sig[0]
 
-    n_win = 256
-    n_hop = 128
+    n_win = 2048
+    n_hop = n_win//4
     pad = 1
     win = torch.hann_window(n_win)
     stft = torch.stft(sig, n_fft=n_win*pad, hop_length=n_hop, win_length=n_win, window=win,
-            center=False, return_complex=True).abs().clamp(1e-8).log10()
+            center=False, return_complex=True).abs()
 
     return plot_spect(stft, fs, n_win, n_hop, title, show, fig_ind)
 
 
+
 def plot_freqz(sos, fs, cutoff_freq, fig_ind=0):
+    """
+    Plot the frequency response of a filter
+    """
+    
     (w,h) = signal.sosfreqz(sos, fs=fs)
     h = torch.Tensor(np.abs(h)).log10()
     plt.figure(fig_ind)

@@ -1,20 +1,33 @@
+# Output sample rate
 data_fs: 44100
-lp_fs: 8000
 
-training_length: 2
+# Input sample rate
+lp_fs: 16000
+
+
+# Length of each training sample
+training_length: 1
 
 # When processing a whole audio file, split it into segments to process one at
 # a time, for memory reasons. This is the length in seconds of each segment.
 # This number will change depending on the system.
-eval_segment_seconds: 35
+eval_segment_seconds: 15
 
+# Where to save results
 saved_model_folder: 'models/'
+results_folder: 'result_files/'
+samples_folder: 'samples/'
+
+
+# Spectrogram discriminator list, w/ different window sizes
+spectrogram_win_lens: [2048]
+spectrogram_hop_divider: 4
 
 
 # Inclusive ranges for parameters
 filters:
-  cutoff_low: 3000
-  cutoff_high: 6000
+  cutoff_low: 7700
+  cutoff_high: 8000
   butterworth:
     order_low: 40
     order_high: 60
@@ -32,6 +45,7 @@ filters:
     rs_low: 80
     rs_high: 120
 
+# Tested, found ideal values
 #filters:
 #  cutoff: 5000
 #  butterworth:
