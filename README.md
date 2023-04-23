@@ -3,7 +3,7 @@ This is a Generative Adversarial Network (GAN) that creates the missing high-fre
 for low-bandwidth music. It uses the WaveNet architecture and multi-domain and multi-scale
 discriminators.
 
-This was the final project for Computer Audition (ECE477 @ UR).
+This was the final project for Computer Audition (ECE477).
 
 ## Examples
 Sample results can be found in the [samples/](samples/) directory. There are both segments of
