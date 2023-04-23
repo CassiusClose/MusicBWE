@@ -1,4 +1,4 @@
-#GAN-Based Bandwidth Extension for Music
+# GAN-Based Bandwidth Extension for Music
 This is a Generative Adversarial Network (GAN) that creates the missing high-frequency content
 for low-bandwidth music. It uses the WaveNet architecture and multi-domain and multi-scale
 discriminators.
